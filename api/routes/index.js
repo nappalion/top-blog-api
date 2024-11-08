@@ -1,9 +1,9 @@
-const user = require("./user");
-const post = require("./post");
-const comment = require("./comment");
+const userRoute = require("./userRoute");
+const postRoute = require("./postRoute");
+const commentRoute = require("./commentRoute");
 
 module.exports = {
-  user,
-  post,
-  comment,
+  userRoute,
+  postRoute,
+  commentRoute,
 };
