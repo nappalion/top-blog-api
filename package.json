@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "blog-dev": "pnpm --filter api dev & pnpm --filter frontend-blog dev",
-    "admin-dev": "pnpm --filter api dev & pnpm --filter frontend-admin dev"
+    "server": "pnpm --filter api dev",
+    "blog": "pnpm --filter frontend-blog dev",
+    "admin": "pnpm --filter frontend-admin dev"
   },
   "keywords": [],
   "author": "",
