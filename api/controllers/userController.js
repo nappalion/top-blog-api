@@ -1,7 +1,9 @@
 const prisma = require("../db/prismadb");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 const getUser = [
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       const { userId } = req.params;
@@ -45,11 +47,18 @@ const createUser = [
 ];
 
 const updateUser = [
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       const { userId } = req.params;
       const userIdAsNumber = Number(userId);
       const { username, password } = req.body;
+
+      if (req.user.id !== userIdAsNumber) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot edit this user." });
+      }
 
       const newData = {};
       if (username) newData.username = username;
@@ -69,10 +78,17 @@ const updateUser = [
 ];
 
 const deleteUser = [
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       const { userId } = req.params;
       const userIdAsNumber = Number(userId);
+
+      if (req.user.id !== userIdAsNumber) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot delete this user." });
+      }
 
       await prisma.user.delete({
         where: { id: userIdAsNumber },

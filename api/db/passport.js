@@ -1,8 +1,28 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const prisma = require("./prismadb");
 
+// Passport JWT Strategy
+var JwtStrategy = require("passport-jwt").Strategy,
+  ExtractJwt = require("passport-jwt").ExtractJwt;
+
+const options = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.SECRET_KEY,
+};
+
+passport.use(
+  new JwtStrategy(options, function (jwt_payload, done) {
+    if (jwt_payload) {
+      return done(null, jwt_payload);
+    } else {
+      return done(null, false);
+    }
+  })
+);
+
+// Passport Local Strategy
 const verifyCallback = async (username, password, done) => {
   try {
     const user = await prisma.user.findUnique({

@@ -4,6 +4,7 @@ const getPost = [
   async (req, res) => {
     const { postId } = req.params;
     const postIdAsNumber = Number(postId);
+
     try {
       const post = await prisma.post.findUnique({
         where: {
@@ -46,14 +47,28 @@ const createPost = [
 const updatePost = [
   async (req, res) => {
     const { postId } = req.params;
-    const { title, content, published, authorId } = req.body;
+    const { title, content, published } = req.body;
     const postIdAsNumber = Number(postId);
+
     try {
+      const foundPost = await prisma.post.findUnique({
+        where: {
+          id: postIdAsNumber,
+        },
+      });
+
+      if (!foundPost) return res.status(400).json({ error: "Post not found" });
+
+      if (req.user.id !== foundPost.authorId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot edit this post." });
+      }
+
       const newData = {};
       if (title) newData.title = title;
       if (content) newData.content = content;
       if (published) newData.published = published;
-      if (authorId) newData.authorId = authorId;
 
       const post = await prisma.post.update({
         where: {
@@ -74,7 +89,22 @@ const deletePost = [
   async (req, res) => {
     const { postId } = req.params;
     const postIdAsNumber = Number(postId);
+
     try {
+      const post = await prisma.post.findUnique({
+        where: {
+          id: postIdAsNumber,
+        },
+      });
+
+      if (!post) return res.status(400).json({ error: "Post not found" });
+
+      if (req.user.id !== post.authorId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot delete this post." });
+      }
+
       await prisma.post.delete({
         where: {
           id: postIdAsNumber,

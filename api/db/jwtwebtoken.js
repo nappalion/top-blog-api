@@ -1,25 +1,17 @@
 const jwt = require("jsonwebtoken");
 
-const generateToken = (req, res) => {
-  jwt.sign({ user: req.user }, process.env.SECRET_KEY, (err, token) => {
-    res.json({
-      message: "Login successful",
-      token,
-    });
-  });
+const generateToken = (req, res, next) => {
+  return jwt.sign(
+    { id: req.user.id, username: req.user.username },
+    process.env.SECRET_KEY,
+    { expiresIn: "1h" },
+    (err, token) => {
+      return res.json({
+        message: "Login successful",
+        token,
+      });
+    }
+  );
 };
 
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403).json({ error: "Access forbidden: No token provided." });
-  }
-};
-
-module.exports = { generateToken, verifyToken };
+module.exports = { generateToken };

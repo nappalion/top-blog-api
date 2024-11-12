@@ -49,6 +49,21 @@ const updateComment = [
     const { content } = req.body;
     const commentIdAsNumber = Number(commentId);
     try {
+      const foundComment = await prisma.comment.findUnique({
+        where: {
+          id: commentIdAsNumber,
+        },
+      });
+
+      if (!foundComment)
+        return res.status(400).json({ error: "Comment not found" });
+
+      if (req.user.id !== foundComment.authorId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot edit this comment." });
+      }
+
       const comment = await prisma.comment.update({
         where: {
           id: commentIdAsNumber,
@@ -69,6 +84,20 @@ const deleteComment = [
     const { commentId } = req.params;
     const commentIdAsNumber = Number(commentId);
     try {
+      const comment = await prisma.comment.findUnique({
+        where: {
+          id: commentIdAsNumber,
+        },
+      });
+
+      if (!comment) return res.status(400).json({ error: "Comment not found" });
+
+      if (req.user.id !== comment.authorId) {
+        return res
+          .status(403)
+          .json({ error: "Unauthorized: You cannot edit this comment." });
+      }
+
       await prisma.comment.delete({
         where: {
           id: commentIdAsNumber,

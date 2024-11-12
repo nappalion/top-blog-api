@@ -12,8 +12,16 @@ require("./db/passport");
 app.use(passport.initialize());
 
 app.use("/users", routes.userRoute);
-app.use("/comments", routes.commentRoute);
-app.use("/posts", routes.postRoute);
+app.use(
+  "/comments",
+  passport.authenticate("jwt", { session: false }),
+  routes.commentRoute
+);
+app.use(
+  "/posts",
+  passport.authenticate("jwt", { session: false }),
+  routes.postRoute
+);
 app.use("/sessions", routes.sessionRoute);
 
 app.listen(process.env.PORT, () => {
