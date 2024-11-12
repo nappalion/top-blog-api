@@ -1,5 +1,4 @@
 const prisma = require("../db/prismadb");
-const passport = require("passport");
 const bcrypt = require("bcrypt");
 
 const getUser = [
