@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
-import { getToken, setToken } from "./utils/tokenStorage";
+import { getToken, setToken } from "../utils/tokenStorage";
 
-function App() {
+function Login() {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -22,10 +21,9 @@ function App() {
     event.preventDefault();
 
     const data = { username, password };
-    console.log("hello");
 
     try {
-      const response = await fetch(baseUrl + "/users", {
+      const tokenResponse = await fetch(baseUrl + "/sessions", {
         method: "POST",
         mode: "cors",
         headers: {
@@ -34,28 +32,15 @@ function App() {
         body: JSON.stringify(data),
       });
 
-      if (response.ok) {
-        const tokenResponse = await fetch(baseUrl + "/sessions", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+      if (tokenResponse.ok) {
+        const tokenData = await tokenResponse.json();
+        const token = tokenData.token;
 
-        if (tokenResponse.ok) {
-          const tokenData = await tokenResponse.json();
-          const token = tokenData.token;
-
-          setToken(token);
-          console.log("Token stored in localStorage:", token);
-          navigate("/home");
-        } else {
-          alert("Token creation failed.");
-        }
+        setToken(token);
+        console.log("Token stored in localStorage:", token);
+        navigate("/home");
       } else {
-        alert("Form submission failed.");
+        alert("Token creation failed.");
       }
     } catch (error) {
       alert("An error occurred: " + error.message);
@@ -64,7 +49,7 @@ function App() {
 
   return (
     <div>
-      <h1>Sign up</h1>
+      <h1>Log in</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Username:
@@ -84,10 +69,10 @@ function App() {
         </label>
         <button type="submit">Sign up</button>
       </form>
-      <p>Already have an account?</p>
-      <button onClick={() => navigate("/login")}>Log in</button>
+      <p>Need an account?</p>
+      <button onClick={() => navigate("/")}>Sign up</button>
     </div>
   );
 }
 
-export default App;
+export default Login;
