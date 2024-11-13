@@ -1,6 +1,36 @@
 const prisma = require("../db/prismadb");
 
-const getComment = [
+const getCommentsByPostId = [
+  async (req, res) => {
+    const postId = Number(req.params.postId);
+    const page = Number(req.query.page) || 1;
+    const pageSize = Number(req.query.pageSize) || 10;
+
+    try {
+      const comments = await prisma.comment.findMany({
+        where: {
+          postId,
+        },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      if (!comments || comments.length === 0) {
+        return res.status(404).json({ error: "No comments found" });
+      }
+
+      return res.status(200).json(comments);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "An error occurred" });
+    }
+  },
+];
+
+const getCommentById = [
   async (req, res) => {
     const { commentId } = req.params;
     const commentIdAsNumber = Number(commentId);
@@ -114,4 +144,10 @@ const deleteComment = [
   },
 ];
 
-module.exports = { getComment, createComment, updateComment, deleteComment };
+module.exports = {
+  getCommentsByPostId,
+  getCommentById,
+  createComment,
+  updateComment,
+  deleteComment,
+};

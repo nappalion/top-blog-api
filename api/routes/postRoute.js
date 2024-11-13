@@ -2,7 +2,9 @@ const express = require("express");
 const postController = require("../controllers/postController");
 const router = express.Router();
 
-router.get("/:postId", postController.getPost);
+router.get("/", postController.getPosts);
+
+router.get("/:postId", postController.getPostById);
 
 router.post("/", postController.createPost);
 
