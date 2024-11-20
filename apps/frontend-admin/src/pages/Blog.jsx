@@ -12,6 +12,10 @@ function Blog() {
     navigate("/post", { state: { post } });
   };
 
+  const handleUpdatePost = (post) => {
+    navigate("/update", { state: { post } });
+  };
+
   const handleDeletePost = async (post) => {
     try {
       const response = await fetch(baseUrl + "/posts/" + post.id, {
@@ -82,10 +86,14 @@ function Blog() {
           return (
             <div key={post.id}>
               <p>{post.title}</p>
-              <p>{post.authorId}</p>
+              <p>Published: {post.published ? "True" : "False"}</p>
+              <p>Author: {post.authorId}</p>
               <button onClick={() => handleViewPost(post)}>View post</button>
               <button onClick={() => handleDeletePost(post)}>
                 Delete post
+              </button>
+              <button onClick={() => handleUpdatePost(post)}>
+                Update post
               </button>
             </div>
           );

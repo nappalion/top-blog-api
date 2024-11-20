@@ -57,7 +57,8 @@ function Blog() {
           return (
             <div key={post.id}>
               <p>{post.title}</p>
-              <p>{post.authorId}</p>
+              <p>Published: {post.published ? "True" : "False"}</p>
+              <p>Author: {post.authorId}</p>
               <button onClick={() => handleViewPost(post)}>View post</button>
             </div>
           );

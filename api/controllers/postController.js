@@ -119,7 +119,7 @@ const updatePost = [
       const newData = {};
       if (title) newData.title = title;
       if (content) newData.content = content;
-      if (published) newData.published = published;
+      if (published !== undefined) newData.published = published;
 
       const post = await prisma.post.update({
         where: {

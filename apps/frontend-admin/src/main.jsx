@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Blog from "./pages/Blog.jsx";
 import BlogPost from "./pages/BlogPost.jsx";
 import NewPost from "./pages/NewPost.jsx";
+import UpdatePost from "./pages/UpdatePost.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/new",
     element: <NewPost />,
+  },
+  {
+    path: "/update",
+    element: <UpdatePost />,
   },
 ]);
 
