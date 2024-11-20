@@ -19,7 +19,6 @@ function NewPost() {
 
     const contentRaw = convertToRaw(editorState.getCurrentContent());
     const contentState = editorState.getCurrentContent();
-    console.log(contentState.hasText());
     const currUser = decodeToken();
 
     const newPostData = {

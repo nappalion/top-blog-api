@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { EditorState, convertFromRaw } from "draft-js";
 import RichTextEditor from "../components/RichTextEditor";
 
 function BlogPost() {
@@ -23,17 +23,23 @@ function BlogPost() {
     }
   }, [post.content]);
 
+  const hasContent = editorState.getCurrentContent().hasText();
+
   return (
     <div>
       <NavBar />
       <h1>{post.title}</h1>
       <h2>{post.authorId}</h2>
       <h3>{post.createdAt}</h3>
-      <RichTextEditor
-        editorState={editorState}
-        readOnly={true}
-        onChange={() => {}}
-      />
+      {hasContent ? (
+        <RichTextEditor
+          editorState={editorState}
+          readOnly={true}
+          onChange={() => {}}
+        />
+      ) : (
+        <p>No content</p>
+      )}
     </div>
   );
 }
