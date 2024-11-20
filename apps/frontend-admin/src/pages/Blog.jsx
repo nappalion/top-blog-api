@@ -25,10 +25,9 @@ function Blog() {
             Authorization: "Bearer " + getToken(),
           },
         });
-        console.log(response);
+
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setPosts(data);
         } else {
           alert("Retrieving posts failed.");
@@ -55,6 +54,7 @@ function Blog() {
     <div>
       <NavBar />
       <h1>Blog</h1>
+      <button onClick={() => navigate("/new")}>Create new post</button>
       <div>
         {posts.map((post) => {
           return (

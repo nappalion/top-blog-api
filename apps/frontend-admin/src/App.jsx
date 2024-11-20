@@ -22,7 +22,6 @@ function App() {
     event.preventDefault();
 
     const data = { username, password };
-    console.log("hello");
 
     try {
       const response = await fetch(baseUrl + "/users", {

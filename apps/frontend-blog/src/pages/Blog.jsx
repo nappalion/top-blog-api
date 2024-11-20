@@ -23,10 +23,9 @@ function Blog() {
             Authorization: "Bearer " + getToken(),
           },
         });
-        console.log(response);
+
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setPosts(data);
         } else {
           alert("Retrieving posts failed.");

@@ -7,6 +7,9 @@ const getPosts = [
 
     try {
       const posts = await prisma.post.findMany({
+        where: {
+          published: true,
+        },
         skip: (page - 1) * pageSize,
         take: pageSize,
         orderBy: {
