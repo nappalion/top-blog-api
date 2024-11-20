@@ -11,6 +11,7 @@ function Blog() {
   const handleViewPost = (post) => {
     navigate("/post", { state: { post } });
   };
+  
 
   useEffect(() => {
     const fetchPosts = async () => {

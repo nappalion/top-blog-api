@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
-import { getToken, setToken } from "./utils/tokenStorage";
+import { setToken } from "./utils/tokenStorage";
 
 function App() {
   const navigate = useNavigate();
@@ -9,14 +9,6 @@ function App() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    const token = getToken();
-
-    if (token) {
-      navigate("/home");
-    }
-  }, [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

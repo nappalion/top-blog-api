@@ -18,10 +18,6 @@ const getCommentsByPostId = [
         },
       });
 
-      if (!comments || comments.length === 0) {
-        return res.status(404).json({ error: "No comments found" });
-      }
-
       return res.status(200).json(comments);
     } catch (error) {
       console.log(error);

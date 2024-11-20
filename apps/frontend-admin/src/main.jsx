@@ -10,32 +10,58 @@ import Blog from "./pages/Blog.jsx";
 import BlogPost from "./pages/BlogPost.jsx";
 import NewPost from "./pages/NewPost.jsx";
 import UpdatePost from "./pages/UpdatePost.jsx";
+import ProtectedRoute from "./pages/ProtectedRoute.jsx";
+import AuthRedirect from "./pages/AuthRedirect.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <AuthRedirect>
+        <App />
+      </AuthRedirect>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <AuthRedirect>
+        <Login />
+      </AuthRedirect>
+    ),
   },
   {
     path: "/home",
-    element: <Blog />,
+    element: (
+      <ProtectedRoute>
+        <Blog />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/post",
-    element: <BlogPost />,
+    element: (
+      <ProtectedRoute>
+        <BlogPost />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/new",
-    element: <NewPost />,
+    element: (
+      <ProtectedRoute>
+        <NewPost />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/update",
-    element: <UpdatePost />,
+    element: (
+      <ProtectedRoute>
+        <UpdatePost />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

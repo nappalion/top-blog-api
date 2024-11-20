@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { EditorState, convertFromRaw } from "draft-js";
 import RichTextEditor from "../components/RichTextEditor";
+import { getToken } from "../utils/tokenStorage";
 
 function BlogPost() {
   const location = useLocation();
@@ -11,6 +12,41 @@ function BlogPost() {
   );
 
   const post = location.state?.post;
+
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
+
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  const handleSubmitComment = () => {
+    // TODO: handle submitting comment
+  };
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(baseUrl + "/comments/post/" + post.id, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + getToken(),
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setComments(data);
+        } else {
+          alert("Retrieving comments failed.");
+        }
+      } catch (error) {
+        alert("An error occurred: " + error.message);
+      }
+    };
+
+    fetchComments();
+  });
 
   useEffect(() => {
     if (post.content) {
@@ -40,6 +76,28 @@ function BlogPost() {
       ) : (
         <p>No content</p>
       )}
+      <h2>Comments:</h2>
+
+      <form onSubmit={handleSubmitComment}>
+        <label>
+          Comment:
+          <input
+            type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </label>
+        <button type="submit">Create comment</button>
+      </form>
+
+      {comments.map((comment) => {
+        return (
+          <div key={comment.id}>
+            <p>{comment.content}</p>
+            <p>Author: {comment.authorId}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
