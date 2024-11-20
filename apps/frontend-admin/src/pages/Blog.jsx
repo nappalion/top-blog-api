@@ -12,6 +12,28 @@ function Blog() {
     navigate("/post", { state: { post } });
   };
 
+  const handleDeletePost = async (post) => {
+    try {
+      const response = await fetch(baseUrl + "/posts/" + post.id, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getToken(),
+        },
+      });
+
+      if (response.ok) {
+        alert("Successfully deleted post.");
+        setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id));
+      } else {
+        alert("Failed deleting post.");
+      }
+    } catch (error) {
+      alert("An error occurred: " + error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       const currUser = decodeToken();
@@ -62,6 +84,9 @@ function Blog() {
               <p>{post.title}</p>
               <p>{post.authorId}</p>
               <button onClick={() => handleViewPost(post)}>View post</button>
+              <button onClick={() => handleDeletePost(post)}>
+                Delete post
+              </button>
             </div>
           );
         })}
