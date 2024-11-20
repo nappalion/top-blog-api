@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 export const setToken = (token) => {
   localStorage.setItem("authToken", token);
 };
@@ -20,6 +22,12 @@ export const isTokenValid = (token) => {
     console.log("Token error: " + error);
     return false; // If any error occurs, treat the token as invalid
   }
+};
+
+export const decodeToken = () => {
+  const decodedToken = jwtDecode(getToken());
+
+  return { id: decodedToken.id, username: decodedToken.username };
 };
 
 export const removeToken = () => {

@@ -11,7 +11,6 @@ function Blog() {
   const handleViewPost = (post) => {
     navigate("/post", { state: { post } });
   };
-  
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,10 +28,10 @@ function Blog() {
           const data = await response.json();
           setPosts(data);
         } else {
-          alert("Retrieving posts failed.");
+          console.log("Retrieving posts failed.");
         }
       } catch (error) {
-        alert("An error occurred: " + error.message);
+        console.log("An error occurred: " + error.message);
       }
     };
 

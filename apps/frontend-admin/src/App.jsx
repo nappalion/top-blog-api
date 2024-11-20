@@ -43,13 +43,13 @@ function App() {
           console.log("Token stored in localStorage:", token);
           navigate("/home");
         } else {
-          alert("Token creation failed.");
+          console.log("Token creation failed.");
         }
       } else {
-        alert("Form submission failed.");
+        console.log("Form submission failed.");
       }
     } catch (error) {
-      alert("An error occurred: " + error.message);
+      console.log("An error occurred: " + error.message);
     }
   };
 

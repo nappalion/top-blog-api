@@ -32,10 +32,10 @@ function Login() {
         console.log("Token stored in localStorage:", token);
         navigate("/home");
       } else {
-        alert("Token creation failed.");
+        console.log("Token creation failed.");
       }
     } catch (error) {
-      alert("An error occurred: " + error.message);
+      console.log("An error occurred: " + error.message);
     }
   };
 

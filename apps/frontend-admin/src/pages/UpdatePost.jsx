@@ -56,10 +56,10 @@ function UpdatePost() {
       if (response.ok) {
         navigate("/home");
       } else {
-        alert("Update post failed.");
+        console.log("Update post failed.");
       }
     } catch (error) {
-      alert("An error occurred: " + error.message);
+      console.log("An error occurred: " + error.message);
     }
   };
 

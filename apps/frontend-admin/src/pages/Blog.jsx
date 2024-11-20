@@ -28,13 +28,13 @@ function Blog() {
       });
 
       if (response.ok) {
-        alert("Successfully deleted post.");
+        console.log("Successfully deleted post.");
         setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id));
       } else {
-        alert("Failed deleting post.");
+        console.log("Failed deleting post.");
       }
     } catch (error) {
-      alert("An error occurred: " + error.message);
+      console.log("An error occurred: " + error.message);
     }
   };
 
@@ -56,10 +56,10 @@ function Blog() {
           const data = await response.json();
           setPosts(data);
         } else {
-          alert("Retrieving posts failed.");
+          console.log("Retrieving posts failed.");
         }
       } catch (error) {
-        alert("An error occurred: " + error.message);
+        console.log("An error occurred: " + error.message);
       }
     };
 

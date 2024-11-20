@@ -121,7 +121,7 @@ const deleteComment = [
       if (req.user.id !== comment.authorId) {
         return res
           .status(403)
-          .json({ error: "Unauthorized: You cannot edit this comment." });
+          .json({ error: "Unauthorized: You cannot delete this comment." });
       }
 
       await prisma.comment.delete({

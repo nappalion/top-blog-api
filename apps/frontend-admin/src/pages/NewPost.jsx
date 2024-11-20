@@ -41,10 +41,10 @@ function NewPost() {
       if (response.ok) {
         navigate("/home");
       } else {
-        alert("Create post failed.");
+        console.log("Create post failed.");
       }
     } catch (error) {
-      alert("An error occurred: " + error.message);
+      console.log("An error occurred: " + error.message);
     }
   };
 
