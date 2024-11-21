@@ -7,6 +7,14 @@ function Blog() {
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const handleViewMorePosts = async () => {
+    const grabbedPosts = await fetchPosts(page + 1);
+    if (grabbedPosts) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const handleViewPost = (post) => {
     navigate("/post", { state: { post } });
@@ -38,43 +46,44 @@ function Blog() {
     }
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const currUser = decodeToken();
+  const fetchPosts = async (page) => {
+    const currUser = decodeToken();
 
-      try {
-        const response = await fetch(baseUrl + "/posts/author/" + currUser.id, {
+    try {
+      const response = await fetch(
+        `${baseUrl}/posts/author/${currUser.id}?page=${page}`,
+        {
           method: "GET",
           mode: "cors",
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + getToken(),
           },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setPosts(data);
-        } else {
-          console.log("Retrieving posts failed.");
         }
-      } catch (error) {
-        console.log("An error occurred: " + error.message);
-      }
-    };
+      );
 
-    const checkValidToken = () => {
-      const token = getToken();
+      if (response.ok) {
+        const data = await response.json();
 
-      if (!token) {
-        navigate("/");
+        if (data.length !== 0) {
+          const newPosts = [...posts, ...data];
+          setPosts(newPosts);
+          return true;
+        }
+        return false;
       } else {
-        fetchPosts();
+        console.log("Retrieving posts failed.");
+        return false;
       }
-    };
+    } catch (error) {
+      console.log("An error occurred: " + error.message);
+      return false;
+    }
+  };
 
-    checkValidToken();
-  }, [baseUrl, navigate]);
+  useEffect(() => {
+    fetchPosts(page);
+  }, []);
 
   return (
     <div>
@@ -99,6 +108,7 @@ function Blog() {
           );
         })}
       </div>
+      <button onClick={handleViewMorePosts}>View more</button>
     </div>
   );
 }
